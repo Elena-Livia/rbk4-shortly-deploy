@@ -3,6 +3,22 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      options: {
+        separator: "\n", //add a new line after each file
+        banner: "", //added before everything
+        footer: "" //added after everything
+      },
+      dist: {
+        // the files to concatenate
+        src: [
+        'public/**/*.js'
+        ],
+        // the location of the resulting JS file
+        dest: 'public/<%= pkg.name %>.js'
+      }
+      // src: ['public/**/*.js'],
+      // dest: 'public/<%= pkg.name %>.js'
+
     },
 
     mochaTest: {
@@ -21,10 +37,17 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        banner: ""
+      },
+      build: {
+        src: ['public/<%= pkg.name %>.js'],
+        dest: 'public/uglified.js'
+      }
     },
 
     eslint: {
-      target: [
+      target: ['public/shortly-deploy.js'
         // Add list of files to lint here
       ]
     },
@@ -88,7 +111,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', [
-    // add your deploy tasks here
+    'concat', 'uglify', 'eslint'
   ]);
 
 
